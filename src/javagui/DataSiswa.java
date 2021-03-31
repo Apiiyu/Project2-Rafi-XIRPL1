@@ -9,9 +9,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
+/**0
  *
  * @author khoir
  */
@@ -72,7 +73,7 @@ public class DataSiswa extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         cmdRefresh = new javax.swing.JButton();
         cmdTambah = new javax.swing.JButton();
-        cmdEdit = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         cmdHapus = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -88,6 +89,11 @@ public class DataSiswa extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbl_siswa.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_siswaMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tbl_siswa);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
@@ -97,10 +103,10 @@ public class DataSiswa extends javax.swing.JFrame {
 
         cmdTambah.setText("Tambah");
 
-        cmdEdit.setText("Ubah");
-        cmdEdit.addActionListener(new java.awt.event.ActionListener() {
+        jButton3.setText("Ubah");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmdEditActionPerformed(evt);
+                jButton3ActionPerformed(evt);
             }
         });
 
@@ -124,7 +130,7 @@ public class DataSiswa extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 460, Short.MAX_VALUE)
                         .addComponent(cmdTambah)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmdEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cmdHapus)
                         .addGap(24, 24, 24))))
@@ -138,13 +144,13 @@ public class DataSiswa extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(43, 43, 43)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(49, 49, 49)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmdRefresh)
                     .addComponent(cmdTambah)
-                    .addComponent(cmdEdit)
+                    .addComponent(jButton3)
                     .addComponent(cmdHapus))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
@@ -155,11 +161,33 @@ public class DataSiswa extends javax.swing.JFrame {
     
     private void cmdHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdHapusActionPerformed
         // TODO add your handling code here:
+        String idWhoWantToBeDelete = tbl_siswa.getValueAt(baris, 0).toString();
+        try{
+            Statement stmt = koneksi.createStatement();
+            String query = "DELETE FROM t_siswa WHERE nis = '"+idWhoWantToBeDelete+"'";
+            
+            int berhasil = stmt.executeUpdate(query);
+            if(berhasil == 1){
+                JOptionPane.showMessageDialog(null, "Data Berhasil Dihapus!");
+                dtm.getDataVector().removeAllElements();
+                showData();
+            } else {
+                JOptionPane.showMessageDialog(null, "Data Gagal Dihapus!");
+            }
+        } catch (SQLException ex){
+            ex.printStackTrace();
+        }
     }//GEN-LAST:event_cmdHapusActionPerformed
 
-    private void cmdEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdEditActionPerformed
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cmdEditActionPerformed
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    int baris;
+    private void tbl_siswaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_siswaMouseClicked
+        // TODO add your handling code here:
+        baris = tbl_siswa.getSelectedRow();
+    }//GEN-LAST:event_tbl_siswaMouseClicked
 
     /**
      * @param args the command line arguments
@@ -197,10 +225,10 @@ public class DataSiswa extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton cmdEdit;
     private javax.swing.JButton cmdHapus;
     private javax.swing.JButton cmdRefresh;
     private javax.swing.JButton cmdTambah;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tbl_siswa;
